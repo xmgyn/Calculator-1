@@ -5,6 +5,17 @@
 #include <QPushButton>
 #include <QLCDNumber>
 
+class Valuables {
+public:
+    double FirstNumber = 0, SecondNumber = 0;
+
+    double FirstNumberGet() { return FirstNumber; };
+    void FirstNumberSet(double value) { FirstNumber = value; };
+    double SecondNumberGet() { return SecondNumber; };
+    void SecondNumberSet(double value) { SecondNumber = value; };
+
+};
+
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -14,6 +25,7 @@ public:
     ~Widget();
 
     QLCDNumber *Screen;
+    static Valuables* Resource;
 
     class NormalButton : public QObject {
         QPushButton *Button;
@@ -37,7 +49,16 @@ public:
     }
 )");
             connect(Button, &QPushButton::clicked, this, [=]() {
-                LocalScreen->display(text);
+                if (text == "+" || text == "-" || text == "*" || text == "/" ) {
+
+                } else if (text == "AC") {
+
+                } else if (text == "=") {
+
+                } else {
+                    Resource->FirstNumberSet(Resource->FirstNumberGet() * 10 + text.toDouble());
+                    LocalScreen->display(Resource->FirstNumberGet());
+                }
             });
 
         }
