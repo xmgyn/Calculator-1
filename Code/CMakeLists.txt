@@ -9,6 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_language("RC")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -19,10 +21,12 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    set(WINDOWS_ICON_RESOURCE metadata.rc)
     qt_add_executable(Calculator-1
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         icons.qrc
+        ${WINDOWS_ICON_RESOURCE}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Calculator-1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -68,3 +72,4 @@ install(TARGETS Calculator-1
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Calculator-1)
 endif()
+

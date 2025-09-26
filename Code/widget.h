@@ -4,34 +4,60 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QLCDNumber>
+#include <QKeyEvent>
+#include <QDebug>
 
-class Valuables {
-public:
-    double FirstNumber = 0, SecondNumber = 0;
-
-    double FirstNumberGet() { return FirstNumber; };
-    void FirstNumberSet(double value) { FirstNumber = value; };
-    double SecondNumberGet() { return SecondNumber; };
-    void SecondNumberSet(double value) { SecondNumber = value; };
-
-};
+inline QLCDNumber *Screen;
 
 class Widget : public QWidget
 {
     Q_OBJECT
 
+private:
+    double FirstNumber = 0, SecondNumber = 0;
+    void handleClick(const QString& text) {
+        qInfo() << text << "\n";
+        if (text == "+" || text == "-" || text == "*" || text == "/" ) {
+
+        } else if (text == "AC") {
+            FirstNumber = 0;
+            SecondNumber = 0;
+            Screen->display(0);
+        } else if (text == "=") {
+
+        } else {
+            FirstNumber = FirstNumber * 10 + text.toDouble();
+            Screen->display(FirstNumber);
+        }
+    }
+
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
-    QLCDNumber *Screen;
-    static Valuables* Resource;
+    void keyPressEvent(QKeyEvent* event) {
+        if (event->key() == Qt::Key_Enter) {
+            handleClick("=");
+        } else if (event->key() == Qt::Key_Backspace) {
+
+        } else {
+            QString textl = event->text();
+            QString allowedKeys = "1234567890./*-+=";
+
+            if (!textl.isEmpty() && allowedKeys.contains(textl)) {
+                handleClick(textl);
+            }
+        }
+        event->accept();
+    }
+
 
     class NormalButton : public QObject {
         QPushButton *Button;
 
     public:
-        NormalButton(const QString& text, QLCDNumber* LocalScreen) {
+        static Widget *parent;
+        NormalButton(const QString& text) {
             Button = new QPushButton();
             Button->setFont(QFont("Consolas", 14));
             Button->setText(text);
@@ -49,16 +75,7 @@ public:
     }
 )");
             connect(Button, &QPushButton::clicked, this, [=]() {
-                if (text == "+" || text == "-" || text == "*" || text == "/" ) {
-
-                } else if (text == "AC") {
-
-                } else if (text == "=") {
-
-                } else {
-                    Resource->FirstNumberSet(Resource->FirstNumberGet() * 10 + text.toDouble());
-                    LocalScreen->display(Resource->FirstNumberGet());
-                }
+                parent->handleClick(text);
             });
 
         }
