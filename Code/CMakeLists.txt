@@ -21,12 +21,11 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    set(WINDOWS_ICON_RESOURCE metadata.rc)
     qt_add_executable(Calculator-1
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         icons.qrc
-        ${WINDOWS_ICON_RESOURCE}
+        metadata.rc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Calculator-1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
