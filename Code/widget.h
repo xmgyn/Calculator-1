@@ -3,31 +3,73 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <QLCDNumber>
+#include <QLabel>
 #include <QKeyEvent>
 #include <QDebug>
+#include <climits>
+#include <QScrollArea>
 
-inline QLCDNumber *Screen;
+inline QLabel *Screen;
+inline QScrollArea *ScrollArea;
 
 class Widget : public QWidget
 {
     Q_OBJECT
 
 private:
-    double FirstNumber = 0, SecondNumber = 0;
+    QString History = "", CurrentNumber = "", AnotherNumber = "", Operator = "" ;
+    bool CurrentDecimal = false;
     void handleClick(const QString& text) {
-        qInfo() << text << "\n";
         if (text == "+" || text == "-" || text == "*" || text == "/" ) {
+            AnotherNumber = CurrentNumber;
+            CurrentNumber = "";
+            CurrentDecimal = false;
+            Operator = text;
 
         } else if (text == "AC") {
-            FirstNumber = 0;
-            SecondNumber = 0;
-            Screen->display(0);
-        } else if (text == "=") {
+            CurrentNumber = "";
+            History = "";
+            AnotherNumber = "";
+            CurrentDecimal = false;
+            Operator = "";
+            Screen->setText("0\t\t");
 
+        } else if (text == "=") {
+            if (CurrentNumber.back() == '.') CurrentNumber.append("0");
+            if (AnotherNumber.back() == '.') AnotherNumber.append("0");
+            double result = 0;
+
+            if (Operator == "+") {
+                result = AnotherNumber.toDouble() + CurrentNumber.toDouble();
+            } else if (Operator == "-") {
+                result = AnotherNumber.toDouble() - CurrentNumber.toDouble();
+            } else if (Operator == "*") {
+                result = AnotherNumber.toDouble() * CurrentNumber.toDouble();
+            } else if (Operator == "/") {
+                result = AnotherNumber.toDouble() / CurrentNumber.toDouble();
+            }
+
+            History += "\t\t\n" + AnotherNumber + "\t\t\n" + Operator + "\t\t\t\t" + CurrentNumber + "\t\t\n" + "--------------\t\t\n" + QString::number(result) + "\t\t\n══════════════\t\t";
+
+
+            CurrentNumber = "";
+            AnotherNumber = "";
+            CurrentDecimal = false;
+            Operator = "";
+            Screen->setText(History);
+        } else if (text == ".") {
+            if (!CurrentDecimal) {
+                if (CurrentNumber == "") CurrentNumber.append("0");
+                CurrentNumber.append(".");
+                Screen->setText(CurrentNumber + "0");
+                CurrentDecimal = true;
+            }
         } else {
-            FirstNumber = FirstNumber * 10 + text.toDouble();
-            Screen->display(FirstNumber);
+            if ((CurrentNumber.toDouble() * 10 + text.toDouble()) <= INT_MAX && CurrentNumber.size() < 12) {
+                CurrentNumber.append(text);
+                Screen->setText(History + "\t\t\n" + AnotherNumber + "\t\t\n" + Operator + "\t\t\t\t" + CurrentNumber + "\t\t");
+            }
+
         }
     }
 

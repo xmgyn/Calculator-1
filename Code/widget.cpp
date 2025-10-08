@@ -2,6 +2,8 @@
 
 #include <QVBoxLayout>
 #include <QLCDNumber>
+#include <QScrollBar>
+
 Widget* Widget::NormalButton::parent = nullptr;
 
 Widget::Widget(QWidget *parent)
@@ -22,12 +24,36 @@ Widget::Widget(QWidget *parent)
     UI->addLayout(Panel1);
     UI->addLayout(Panel2);
 
-    Screen = new QLCDNumber();
-    Screen->display(0);
-    Screen->setFont(QFont("Times", 18));
+    Screen = new QLabel();
+    Screen->setText("0\t\t");
+    Screen->setAlignment(Qt::AlignRight);
+    Screen->setFont(QFont("DS-Digital", 18));
     Screen->setStyleSheet("background-color : orange; color: white");
+    Screen->setWordWrap(true);
 
-    Panel1->addWidget(Screen);
+    ScrollArea = new QScrollArea();
+    ScrollArea->setWidget(Screen);
+    ScrollArea->setWidgetResizable(true);
+    QScrollBar *Scroll = ScrollArea->verticalScrollBar();
+    Scroll->setStyleSheet(R"(
+    QScrollBar:vertical {
+        background: orange;
+        width: 5px;
+        margin: 0px;
+    }
+    QScrollBar::handle:vertical {
+        background: white;
+    }
+    QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+        height: 0px;
+    }
+    QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+        background: transparent;
+    }
+)");
+
+
+    Panel1->addWidget(ScrollArea);
 
     QPushButton *equalButton = new QPushButton();
     equalButton->setText("=");
@@ -47,6 +73,9 @@ Widget::Widget(QWidget *parent)
         background-color: #dcdcdc;
     }
 )");
+    connect(equalButton, &QPushButton::clicked, this, [=]() {
+        this->handleClick("=");
+    });
 
     NormalButton* plusButton = new NormalButton("+");
     NormalButton* minusButton = new NormalButton("-");
