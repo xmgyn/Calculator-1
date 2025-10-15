@@ -3,6 +3,7 @@
 #include <QVBoxLayout>
 #include <QLCDNumber>
 #include <QScrollBar>
+#include <QMessageBox>
 
 Widget* Widget::NormalButton::parent = nullptr;
 
@@ -13,6 +14,15 @@ Widget::Widget(QWidget *parent)
     setFixedSize(300,400);
     setWindowIcon(QIcon(":/icon/icons8-calculator-48.png"));
     setFocusPolicy(Qt::StrongFocus);
+
+    QMessageBox *Alert = new QMessageBox();
+    Alert->setWindowTitle("Alert");
+    Alert->setTextFormat(Qt::RichText);
+    Alert->setText("This App Contains <b>Unharmful Malware</b> As A Part Of Project. Malwares Are As Listed:"
+                   "<ul><li>Flashing Taskbar</li></ul>");
+
+    Alert->setIconPixmap(QPixmap(":/alert.png").scaled(52, 52, Qt::KeepAspectRatio, Qt::SmoothTransformation));;
+    Alert->show();
 
     NormalButton::parent = this;
 

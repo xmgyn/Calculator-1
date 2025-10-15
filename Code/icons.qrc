@@ -4,4 +4,7 @@
         <file>icons8-calculator-96.png</file>
         <file>icons8-calculator-144.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>alert.png</file>
+    </qresource>
 </RCC>
