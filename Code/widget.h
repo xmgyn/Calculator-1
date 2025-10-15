@@ -2,15 +2,18 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QApplication>
 #include <QPushButton>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QDebug>
 #include <climits>
 #include <QScrollArea>
+#include <QScrollBar>
 
 inline QLabel *Screen;
 inline QScrollArea *ScrollArea;
+inline QScrollBar *Scroll;
 
 class Widget : public QWidget
 {
@@ -32,13 +35,12 @@ private:
             AnotherNumber = "";
             CurrentDecimal = false;
             Operator = "";
-            Screen->setText("0\t\t");
-
+            Screen->setText("0");
         } else if (text == "=") {
             if (CurrentNumber.back() == '.') CurrentNumber.append("0");
             if (AnotherNumber.back() == '.') AnotherNumber.append("0");
             double result = 0;
-
+            if (AnotherNumber != "" && CurrentNumber != "") { }
             if (Operator == "+") {
                 result = AnotherNumber.toDouble() + CurrentNumber.toDouble();
             } else if (Operator == "-") {
@@ -49,7 +51,7 @@ private:
                 result = AnotherNumber.toDouble() / CurrentNumber.toDouble();
             }
 
-            History += "\t\t\n" + AnotherNumber + "\t\t\n" + Operator + "\t\t\t\t" + CurrentNumber + "\t\t\n" + "--------------\t\t\n" + QString::number(result) + "\t\t\n══════════════\t\t";
+            History += "\n" + AnotherNumber + "\n" + Operator + "" + CurrentNumber + "\n" + "--------------\n" + QString::number(result) + "\n════════════════";
 
 
             CurrentNumber = "";
@@ -67,10 +69,12 @@ private:
         } else {
             if ((CurrentNumber.toDouble() * 10 + text.toDouble()) <= INT_MAX && CurrentNumber.size() < 12) {
                 CurrentNumber.append(text);
-                Screen->setText(History + "\t\t\n" + AnotherNumber + "\t\t\n" + Operator + "\t\t\t\t" + CurrentNumber + "\t\t");
+                Screen->setText(History + "\n" + AnotherNumber + "\n" + Operator + "" + CurrentNumber + "");
             }
 
         }
+        QApplication::processEvents();
+        Scroll->setValue(Scroll->maximum());
     }
 
 public:

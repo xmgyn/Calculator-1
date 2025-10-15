@@ -25,24 +25,26 @@ Widget::Widget(QWidget *parent)
     UI->addLayout(Panel2);
 
     Screen = new QLabel();
-    Screen->setText("0\t\t");
+    Screen->setText("0");
     Screen->setAlignment(Qt::AlignRight);
-    Screen->setFont(QFont("DS-Digital", 18));
-    Screen->setStyleSheet("background-color : orange; color: white");
+    Screen->setFont(QFont("Cascadia Mono", 18));
+    Screen->setStyleSheet("background-color : #FF7700; color: white; padding : 18px;");
     Screen->setWordWrap(true);
 
     ScrollArea = new QScrollArea();
     ScrollArea->setWidget(Screen);
     ScrollArea->setWidgetResizable(true);
-    QScrollBar *Scroll = ScrollArea->verticalScrollBar();
+    ScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    Scroll = ScrollArea->verticalScrollBar();
     Scroll->setStyleSheet(R"(
     QScrollBar:vertical {
-        background: orange;
+        background: #FF7700;
         width: 5px;
         margin: 0px;
     }
     QScrollBar::handle:vertical {
-        background: white;
+        background: #A34C00;
     }
     QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
         height: 0px;
