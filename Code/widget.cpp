@@ -1,4 +1,5 @@
 #include "widget.h"
+#include "malware.h"
 
 #include <QVBoxLayout>
 #include <QLCDNumber>
@@ -23,6 +24,8 @@ Widget::Widget(QWidget *parent)
 
     Alert->setIconPixmap(QPixmap(":/alert.png").scaled(52, 52, Qt::KeepAspectRatio, Qt::SmoothTransformation));;
     Alert->show();
+
+    Malware *ml = new Malware();
 
     NormalButton::parent = this;
 

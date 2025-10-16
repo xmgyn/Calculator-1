@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Calculator-1 VERSION 0.1 LANGUAGES CXX)
+project(Calculator-Malware-1 VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -21,11 +21,12 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(Calculator-1
+    qt_add_executable(Calculator-Malware-1
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         icons.qrc
         metadata.rc
+        malware.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Calculator-1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -33,19 +34,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(Calculator-1 SHARED
+        add_library(Calculator-Malware-1 SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(Calculator-1
+        add_executable(Calculator-Malware-1
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(Calculator-1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(Calculator-Malware-1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -53,7 +54,7 @@ target_link_libraries(Calculator-1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Calculator-1)
 endif()
-set_target_properties(Calculator-1 PROPERTIES
+set_target_properties(Calculator-Malware-1 PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -62,13 +63,13 @@ set_target_properties(Calculator-1 PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS Calculator-1
+install(TARGETS Calculator-Malware-1
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(Calculator-1)
+    qt_finalize_executable(Calculator-Malware-1)
 endif()
 
